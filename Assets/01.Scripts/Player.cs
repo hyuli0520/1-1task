@@ -68,6 +68,7 @@ public class Player : MonoBehaviour
                 bulletrigid.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 2:
+
                 break;
             case 3:
                 break;
