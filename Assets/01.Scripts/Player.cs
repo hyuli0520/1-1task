@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     {
         speed = 250f;
         maxShotDelay = 0.2f;
-        power = 1;
+        power = 3;
     }
 
     private void Awake()
