@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public float maxSpawnDelay;
     public float curSpawnDelay;
 
+    public GameObject player;
+
     void Update()
     {
         curSpawnDelay += Time.deltaTime;
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
                                        spawnPoints[ranPoint].rotation);
         Rigidbody2D rigid = enemy.GetComponent<Rigidbody2D>();
         Enemy enemyLogic = enemy.GetComponent<Enemy>();
+        enemyLogic.player = player;
 
         if (ranPoint == 5 || ranPoint == 6)
         {
@@ -48,4 +51,16 @@ public class GameManager : MonoBehaviour
             rigid.velocity = new Vector2(0, enemyLogic.enemySpeed * (-1));
         }
     }
+
+    public void RespawnPlayer()
+    {
+        Invoke("RespawnPlayerExt", 2f);
+    }
+
+    void RespawnPlayerExt()
+    {
+        player.transform.position = Vector3.down * 3.5f;
+        player.SetActive(true);
+    }
+
 }

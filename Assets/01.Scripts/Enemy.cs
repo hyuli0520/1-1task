@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public string enemyName;
     public float enemySpeed;
     public int health;
+    public float enemyDmg;
     public Sprite[] sprites;
+
+    public float maxShotDelay;
+    public float curShotDelay;
+
+    public GameObject bulletObjA;
+    public GameObject bulletObjB;
+    public GameObject player;
 
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigid;
@@ -15,6 +24,44 @@ public class Enemy : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        Reload();
+        Fire();
+    }
+
+    private void Fire()
+    {
+        if (curShotDelay < maxShotDelay)
+            return;
+
+        if (enemyName == "S")
+        {
+            GameObject bullet = Instantiate(bulletObjA, transform.position, transform.rotation);
+            Rigidbody2D bulletrigid = bullet.GetComponent<Rigidbody2D>();
+            Vector3 dirVec = player.transform.position - transform.position;
+            bulletrigid.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
+        }
+        else if (enemyName == "L")
+        {
+            GameObject bulletR = Instantiate(bulletObjB, transform.position + Vector3.right * 0.3f, transform.rotation);
+            GameObject bulletL = Instantiate(bulletObjB, transform.position + Vector3.left * 0.3f, transform.rotation);
+            Rigidbody2D bulletrigidR = bulletR.GetComponent<Rigidbody2D>();
+            Rigidbody2D bulletrigidL = bulletL.GetComponent<Rigidbody2D>();
+            Vector3 dirVecR = player.transform.position - transform.position + Vector3.right * 0.3f;
+            Vector3 dirVecL = player.transform.position - transform.position + Vector3.left * 0.3f;
+            bulletrigidR.AddForce(dirVecR.normalized * 4, ForceMode2D.Impulse);
+            bulletrigidL.AddForce(dirVecL.normalized * 4, ForceMode2D.Impulse);
+        }
+
+        curShotDelay = 0;
+    }
+
+    private void Reload()
+    {
+        curShotDelay += Time.deltaTime;
     }
 
     void OnHit(int dmg)
@@ -40,7 +87,7 @@ public class Enemy : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        else if(collision.gameObject.tag == "PlayerBullet")
+        else if (collision.gameObject.tag == "PlayerBullet")
         {
             Bullet bullet = collision.gameObject.GetComponent<Bullet>();
             OnHit(bullet.dmg);

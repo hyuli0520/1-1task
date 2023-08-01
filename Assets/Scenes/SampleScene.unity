@@ -472,6 +472,7 @@ MonoBehaviour:
   - {fileID: 1840419339}
   maxSpawnDelay: 2
   curSpawnDelay: 0
+  player: {fileID: 564806030}
 --- !u!1 &422201930
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,6 +876,7 @@ MonoBehaviour:
   curShotDelay: 0
   bulletObjA: {fileID: 4280864043034709364, guid: 9fcaac825290da34daa248ffe98f40c4, type: 3}
   bulletObjB: {fileID: 430424946019034818, guid: aafe7f5518ead124db935b657dee9632, type: 3}
+  manager: {fileID: 335577446}
 --- !u!50 &564806032
 Rigidbody2D:
   serializedVersion: 4

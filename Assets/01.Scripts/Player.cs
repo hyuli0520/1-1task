@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     float h, v;
     public float speed;
     public int power;
+    public float health;
     public float maxShotDelay;
     public float curShotDelay;
 
     public GameObject bulletObjA;
     public GameObject bulletObjB;
+
+    public GameManager manager;
 
     Rigidbody2D rigid;
     Animator anim;
@@ -22,6 +26,7 @@ public class Player : MonoBehaviour
         speed = 250f;
         maxShotDelay = 0.2f;
         power = 3;
+        health = 100f;
     }
 
     private void Awake()
@@ -98,5 +103,18 @@ public class Player : MonoBehaviour
     private void Reload()
     {
         curShotDelay += Time.deltaTime;
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "EnemyBullet" || collision.gameObject.tag == "Enemy")
+        {
+            manager.RespawnPlayer();
+            gameObject.SetActive(false);
+            if (health <= 0)
+            {
+                gameObject.SetActive(false);
+            }
+        }
     }
 }
