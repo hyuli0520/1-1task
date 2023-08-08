@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: L
+  enemyScore: 500
   enemySpeed: 1
   health: 30
   enemyDmg: 10

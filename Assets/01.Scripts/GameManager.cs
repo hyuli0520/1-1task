@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class GameManager : MonoBehaviour
     public float curSpawnDelay;
 
     public GameObject player;
+    public SpriteRenderer playerSprite;
+    public Text scoreText;
+    public GameObject gameOverSet;
+    public GameObject menuSet;
 
     void Update()
     {
@@ -19,8 +24,23 @@ public class GameManager : MonoBehaviour
         if (curSpawnDelay > maxSpawnDelay)
         {
             SpawnEnemy();
-            maxSpawnDelay = Random.Range(1f, 3f);
+            maxSpawnDelay = Random.Range(1.5f, 3f);
             curSpawnDelay = 0;
+        }
+
+        Player playerLogic = player.GetComponent<Player>();
+        scoreText.text = string.Format("{0:n0}", playerLogic.score);
+
+        if(Input.GetButtonDown("Cancel"))
+        {
+            if(menuSet.activeSelf)
+            {
+                menuSet.SetActive(false);
+            }
+            else
+            {
+                menuSet.SetActive(true);
+            }
         }
     }
 
@@ -61,7 +81,24 @@ public class GameManager : MonoBehaviour
     IEnumerator RespawnPlayerExt()
     {
         yield return new WaitForSeconds(1.5f);
-        player.transform.position = new Vector3(0, -3.5f, 0);
-        player.SetActive(true);
+        playerSprite.color = new Color(1,1,1,1);
+
+        Player playerLogic = player.GetComponent<Player>();
+        playerLogic.isUnbeatable = false;
+    }
+
+    public void GameOver()
+    {
+        gameOverSet.SetActive(true);
+    }
+
+    //public void GameSave()
+    //{
+
+    //}
+
+    public void GameExit()
+    {
+        Application.Quit();
     }
 }

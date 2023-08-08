@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     float h, v;
+    public int score;
     public float speed;
     public int power;
-    public float health;
     public float maxShotDelay;
     public float curShotDelay;
 
@@ -17,22 +17,25 @@ public class Player : MonoBehaviour
     public GameObject bulletObjB;
 
     public GameManager manager;
+    public Enemy enemy;
+    public bool isUnbeatable;
 
     Rigidbody2D rigid;
     Animator anim;
+    SpriteRenderer sprite;
 
     private void Start()
     {
         speed = 250f;
         maxShotDelay = 0.2f;
         power = 3;
-        health = 100f;
     }
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -77,8 +80,8 @@ public class Player : MonoBehaviour
                 GameObject bulletL = Instantiate(bulletObjA, transform.position + Vector3.left * 0.1f, transform.rotation);
                 Rigidbody2D bulletrigidR = bulletR.GetComponent<Rigidbody2D>();
                 Rigidbody2D bulletrigidL = bulletL.GetComponent<Rigidbody2D>();
-                bulletrigidR.AddForce(Vector2.up * 10, ForceMode2D.Impulse); 
-                bulletrigidL.AddForce(Vector2.up * 10, ForceMode2D.Impulse); 
+                bulletrigidR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+                bulletrigidL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 3:
                 GameObject bulletRR = Instantiate(bulletObjA, transform.position + Vector3.right * 0.35f, transform.rotation);
@@ -107,14 +110,43 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "EnemyBullet" || collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "EnemyBullet")
         {
-            manager.RespawnPlayer();
-            gameObject.SetActive(false);
-            if (health <= 0)
+            if (isUnbeatable)
             {
-                gameObject.SetActive(false);
+                return;
             }
+            enemy.PlayerBulletAtc();
+            isUnbeatable = true;
+            if (PlayerHp.health <= 0)
+            {
+                manager.GameOver();
+            }
+            else
+            {
+                manager.RespawnPlayer();
+            }
+            sprite.color = new Color(1, 1, 1, 0.5f);
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Enemy")
+        {
+            if (isUnbeatable)
+            {
+                return;
+            }
+            enemy.PlayerAtc();
+            isUnbeatable = true;
+            if (PlayerHp.health <= 0)
+            {
+                manager.GameOver();
+            }
+            else
+            {
+                manager.RespawnPlayer();
+            }
+            sprite.color = new Color(1, 1, 1, 0.5f);
+            Destroy(collision.gameObject);
         }
     }
 }

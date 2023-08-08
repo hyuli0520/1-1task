@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public string enemyName;
+    public int enemyScore;
     public float enemySpeed;
     public int health;
     public float enemyDmg;
@@ -72,6 +73,8 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0)
         {
+            Player playerLogic = player.GetComponent<Player>();
+            playerLogic.score += enemyScore;
             Destroy(gameObject);
         }
     }
@@ -94,5 +97,15 @@ public class Enemy : MonoBehaviour
 
             Destroy(collision.gameObject);
         }
+    }
+
+    public void PlayerAtc()
+    {
+        PlayerHp.health -= enemyDmg;
+    }
+
+    public void PlayerBulletAtc()
+    {
+        PlayerHp.health -= enemyDmg/2;
     }
 }
