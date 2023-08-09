@@ -10,12 +10,18 @@ public class GameManager : MonoBehaviour
 
     public float maxSpawnDelay;
     public float curSpawnDelay;
+    public int stage;
 
     public GameObject player;
     public SpriteRenderer playerSprite;
     public Text scoreText;
     public GameObject gameOverSet;
     public GameObject menuSet;
+
+    void Start()
+    {
+        stage = 1;
+    }
 
     void Update()
     {
@@ -41,6 +47,11 @@ public class GameManager : MonoBehaviour
             {
                 menuSet.SetActive(true);
             }
+        }
+
+        if(PlayerHp.health <= 0 || PlayerPain.pain >= 100)
+        {
+            GameOver();
         }
     }
 

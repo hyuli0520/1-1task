@@ -89,6 +89,7 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.tag == "BorderBullet")
         {
             Destroy(gameObject);
+            PlayerPain.pain += enemyDmg / 2;
         }
         else if (collision.gameObject.tag == "PlayerBullet")
         {
@@ -101,11 +102,11 @@ public class Enemy : MonoBehaviour
 
     public void PlayerAtc()
     {
-        PlayerHp.health -= enemyDmg;
+        PlayerHp.health -= enemyDmg / 2;
     }
 
     public void PlayerBulletAtc()
     {
-        PlayerHp.health -= enemyDmg/2;
+        PlayerHp.health -= enemyDmg;
     }
 }

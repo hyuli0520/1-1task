@@ -9,6 +9,8 @@ public class PlayerHp : MonoBehaviour
     public float maxHealth;
     public static float health;
 
+    public Text healthText;
+
     void Awake()
     {
         healthBar = GetComponent<Image>();
@@ -23,5 +25,7 @@ public class PlayerHp : MonoBehaviour
     void Update()
     {
         healthBar.fillAmount = (health * 0.01f) / (maxHealth * 0.01f);
+
+        healthText.text = health.ToString();
     }
 }
