@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     public GameObject bulletObjB;
 
     public GameManager manager;
+    public PlayerHp playerHp;
     public Enemy enemy;
     public bool isUnbeatable;
 
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+        playerHp = GetComponent<PlayerHp>();
     }
 
     private void Update()
@@ -118,7 +120,7 @@ public class Player : MonoBehaviour
             }
             enemy.PlayerBulletAtc();
             isUnbeatable = true;
-            if (PlayerHp.health <= 0)
+            if (playerHp.health <= 0)
             {
                 manager.GameOver();
             }
@@ -135,9 +137,8 @@ public class Player : MonoBehaviour
             {
                 return;
             }
-            enemy.PlayerAtc();
             isUnbeatable = true;
-            if (PlayerHp.health <= 0)
+            if (playerHp.health <= 0)
             {
                 manager.GameOver();
             }

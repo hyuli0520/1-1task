@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public float curSpawnDelay;
     public int stage;
 
+    public PlayerHp playerHp;
+
     public GameObject player;
     public SpriteRenderer playerSprite;
     public Text scoreText;
@@ -21,6 +23,11 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         stage = 1;
+    }
+
+    void Awake()
+    {
+        playerHp = GetComponent<PlayerHp>();
     }
 
     void Update()
@@ -49,7 +56,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(PlayerHp.health <= 0 || PlayerPain.pain >= 100)
+        if(playerHp.health <= 0 || PlayerPain.pain >= 100)
         {
             GameOver();
         }

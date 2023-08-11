@@ -698,6 +698,7 @@ MonoBehaviour:
   maxSpawnDelay: 0
   curSpawnDelay: 0
   stage: 0
+  playerHp: {fileID: 0}
   player: {fileID: 564806030}
   playerSprite: {fileID: 564806033}
   scoreText: {fileID: 822948217}
@@ -1478,6 +1479,7 @@ MonoBehaviour:
   bulletObjA: {fileID: 4280864043034709364, guid: 9fcaac825290da34daa248ffe98f40c4, type: 3}
   bulletObjB: {fileID: 430424946019034818, guid: aafe7f5518ead124db935b657dee9632, type: 3}
   manager: {fileID: 335577446}
+  playerHp: {fileID: 1843766783}
   enemy: {fileID: 1954616217627476496, guid: 294141eb86f58bf41852398cb671dd7c, type: 3}
   isUnbeatable: 0
 --- !u!50 &564806032
@@ -1560,7 +1562,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564806030}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3536,6 +3538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 0
+  health: 0
   healthText: {fileID: 21319832}
 --- !u!114 &1843766784
 MonoBehaviour:
