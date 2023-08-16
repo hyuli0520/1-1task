@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     float h, v;
     public int score;
     public float speed;
+    public int maxPower;
     public int power;
     public float maxShotDelay;
     public float curShotDelay;
@@ -29,7 +30,8 @@ public class Player : MonoBehaviour
     {
         speed = 250f;
         maxShotDelay = 0.2f;
-        power = 3;
+        maxPower = 5;
+        power = 1;
     }
 
     private void Awake()
@@ -86,19 +88,28 @@ public class Player : MonoBehaviour
                 bulletrigidL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 3:
-                GameObject bulletRR = Instantiate(bulletObjA, transform.position + Vector3.right * 0.35f, transform.rotation);
-                GameObject bulletCC = Instantiate(bulletObjB, transform.position, transform.rotation);
-                GameObject bulletLL = Instantiate(bulletObjA, transform.position + Vector3.left * 0.35f, transform.rotation);
-                Rigidbody2D bulletrigidRR = bulletRR.GetComponent<Rigidbody2D>();
-                Rigidbody2D bulletrigidCC = bulletCC.GetComponent<Rigidbody2D>();
-                Rigidbody2D bulletrigidLL = bulletLL.GetComponent<Rigidbody2D>();
-                bulletrigidRR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-                bulletrigidCC.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-                bulletrigidLL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+                GameObject bulletC = Instantiate(bulletObjB, transform.position, transform.rotation);
+                Rigidbody2D bulletrigidC = bulletC.GetComponent<Rigidbody2D>();
+                bulletrigidC.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 4:
+                GameObject bulletRRR = Instantiate(bulletObjA, transform.position + Vector3.right * 0.35f, transform.rotation);
+                GameObject bulletCCC = Instantiate(bulletObjB, transform.position, transform.rotation);
+                GameObject bulletLLL = Instantiate(bulletObjA, transform.position + Vector3.left * 0.35f, transform.rotation);
+                Rigidbody2D bulletrigidRRR = bulletRRR.GetComponent<Rigidbody2D>();
+                Rigidbody2D bulletrigidCCC = bulletCCC.GetComponent<Rigidbody2D>();
+                Rigidbody2D bulletrigidLLL = bulletLLL.GetComponent<Rigidbody2D>();
+                bulletrigidRRR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+                bulletrigidCCC.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+                bulletrigidLLL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 5:
+                GameObject bulletCR = Instantiate(bulletObjB, transform.position + Vector3.right * 0.25f, transform.rotation);
+                GameObject bulletCL = Instantiate(bulletObjB, transform.position + Vector3.left * 0.25f, transform.rotation);
+                Rigidbody2D bulletrigidCR = bulletCR.GetComponent<Rigidbody2D>();
+                Rigidbody2D bulletrigidCL = bulletCL.GetComponent<Rigidbody2D>();
+                bulletrigidCR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+                bulletrigidCL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
         }
 
@@ -120,7 +131,7 @@ public class Player : MonoBehaviour
             }
             enemy.PlayerBulletAtc();
             isUnbeatable = true;
-            if (playerHp.health <= 0)
+            if (PlayerHp.health <= 0)
             {
                 manager.GameOver();
             }
@@ -137,8 +148,9 @@ public class Player : MonoBehaviour
             {
                 return;
             }
+            enemy.PlayerAtc();
             isUnbeatable = true;
-            if (playerHp.health <= 0)
+            if (PlayerHp.health <= 0)
             {
                 manager.GameOver();
             }
@@ -147,6 +159,25 @@ public class Player : MonoBehaviour
                 manager.RespawnPlayer();
             }
             sprite.color = new Color(1, 1, 1, 0.5f);
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Item")
+        {
+            Item item = collision.gameObject.GetComponent<Item>();
+            switch (item.type)
+            {
+                case "Power":
+                    if (power == maxPower)
+                        score += 500;
+                    else
+                        power++;
+                    break;
+                case "Unbeatable":
+                    isUnbeatable = true;
+                    sprite.color = new Color(1, 1, 1, 0.5f);
+                    manager.Unbeatable();
+                    break;
+            }
             Destroy(collision.gameObject);
         }
     }

@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour
     public float curSpawnDelay;
     public int stage;
 
-    public PlayerHp playerHp;
-
     public GameObject player;
     public SpriteRenderer playerSprite;
     public Text scoreText;
@@ -27,7 +25,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        playerHp = GetComponent<PlayerHp>();
     }
 
     void Update()
@@ -44,9 +41,9 @@ public class GameManager : MonoBehaviour
         Player playerLogic = player.GetComponent<Player>();
         scoreText.text = string.Format("{0:n0}", playerLogic.score);
 
-        if(Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Cancel"))
         {
-            if(menuSet.activeSelf)
+            if (menuSet.activeSelf)
             {
                 menuSet.SetActive(false);
             }
@@ -56,7 +53,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(playerHp.health <= 0 || PlayerPain.pain >= 100)
+        if (PlayerHp.health <= 0 || PlayerPain.pain >= 100)
         {
             GameOver();
         }
@@ -99,8 +96,22 @@ public class GameManager : MonoBehaviour
     IEnumerator RespawnPlayerExt()
     {
         yield return new WaitForSeconds(1.5f);
-        playerSprite.color = new Color(1,1,1,1);
+        playerSprite.color = new Color(1, 1, 1, 1);
 
+        Player playerLogic = player.GetComponent<Player>();
+        playerLogic.isUnbeatable = false;
+    }
+
+    public void Unbeatable()
+    {
+        StartCoroutine(UnbeatableExt());
+    }
+
+    IEnumerator UnbeatableExt()
+    {
+        yield return new WaitForSeconds(2.5f);
+        playerSprite.color = new Color(1, 1, 1, 1);
+        yield return new WaitForSeconds(0.5f);
         Player playerLogic = player.GetComponent<Player>();
         playerLogic.isUnbeatable = false;
     }

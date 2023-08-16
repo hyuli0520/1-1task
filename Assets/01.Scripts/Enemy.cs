@@ -17,7 +17,6 @@ public class Enemy : MonoBehaviour
     public GameObject bulletObjA;
     public GameObject bulletObjB;
     public GameObject player;
-    public PlayerHp playerHp;
 
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigid;
@@ -26,7 +25,6 @@ public class Enemy : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
-        playerHp = GetComponent<PlayerHp>();
     }
 
     private void Update()
@@ -104,11 +102,11 @@ public class Enemy : MonoBehaviour
 
     public void PlayerAtc()
     {
-        playerHp.health -= enemyDmg / 2;
+        PlayerHp.health -= enemyDmg / 2;
     }
 
     public void PlayerBulletAtc()
     {
-        playerHp.health -= enemyDmg;
+        PlayerHp.health -= enemyDmg;
     }
 }

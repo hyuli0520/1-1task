@@ -7,7 +7,7 @@ public class PlayerHp : MonoBehaviour
 {
     Image healthBar;
     public float maxHealth;
-    public float health;
+    public static float health;
 
     public Text healthText;
 
