@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject[] enemyObjs;
+    public string[] enemyObjs;
     public Transform[] spawnPoints;
 
     public float maxSpawnDelay;
@@ -17,14 +17,17 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     public GameObject gameOverSet;
     public GameObject menuSet;
+    public ObjectManager objectManager;
 
     void Start()
     {
-        stage = 1;
+        maxSpawnDelay = 5;
     }
 
     void Awake()
     {
+        stage = 1;
+        enemyObjs = new string[] { "EnemyS", "EnemyM", "EnemyL" };
     }
 
     void Update()
@@ -46,10 +49,12 @@ public class GameManager : MonoBehaviour
             if (menuSet.activeSelf)
             {
                 menuSet.SetActive(false);
+                Time.timeScale = 1f;
             }
             else
             {
                 menuSet.SetActive(true);
+                Time.timeScale = 0f;
             }
         }
 
@@ -63,13 +68,13 @@ public class GameManager : MonoBehaviour
     {
         int ranEnemy = Random.Range(0, 3);
         int ranPoint = Random.Range(0, 9);
+        GameObject enemy = objectManager.MakeObj(enemyObjs[ranEnemy]);
+        enemy.transform.position = spawnPoints[ranPoint].position;
 
-        GameObject enemy = Instantiate(enemyObjs[ranEnemy],
-                                       spawnPoints[ranPoint].position,
-                                       spawnPoints[ranPoint].rotation);
         Rigidbody2D rigid = enemy.GetComponent<Rigidbody2D>();
         Enemy enemyLogic = enemy.GetComponent<Enemy>();
         enemyLogic.player = player;
+        enemyLogic.objectManager = objectManager;
 
         if (ranPoint == 5 || ranPoint == 6)
         {
@@ -95,6 +100,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RespawnPlayerExt()
     {
+        playerSprite.color = new Color(1, 1, 1, 0.5f);
         yield return new WaitForSeconds(1.5f);
         playerSprite.color = new Color(1, 1, 1, 1);
 
@@ -109,6 +115,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator UnbeatableExt()
     {
+        playerSprite.color = new Color(1, 1, 1, 0.5f);
         yield return new WaitForSeconds(2.5f);
         playerSprite.color = new Color(1, 1, 1, 1);
         yield return new WaitForSeconds(0.5f);
@@ -119,12 +126,8 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         gameOverSet.SetActive(true);
+        player.SetActive(false);
     }
-
-    //public void GameSave()
-    //{
-
-    //}
 
     public void GameExit()
     {

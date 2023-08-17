@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1661909360274612226}
   - component: {fileID: 3356387180243006736}
   - component: {fileID: 3448533016820860510}
-  - component: {fileID: -6916621130076622163}
+  - component: {fileID: 3608440904255007318}
   m_Layer: 0
   m_Name: Player Bellet B
   m_TagString: PlayerBullet
@@ -134,7 +134,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &-6916621130076622163
+--- !u!114 &3608440904255007318
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

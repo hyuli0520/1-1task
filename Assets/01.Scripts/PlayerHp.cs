@@ -24,6 +24,10 @@ public class PlayerHp : MonoBehaviour
 
     void Update()
     {
+        if (health > maxHealth)
+        {
+            health = 100;
+        }
         healthBar.fillAmount = (health * 0.01f) / (maxHealth * 0.01f);
 
         healthText.text = health.ToString();

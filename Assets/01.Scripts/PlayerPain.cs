@@ -9,14 +9,13 @@ public class PlayerPain : MonoBehaviour
     Image painBar;
     public float maxPain;
     public static float pain;
-    
+
     public GameManager manager;
     public Text painText;
 
     void Start()
     {
         maxPain = 100;
-        pain = 10;
         if (manager.stage == 1)
         {
             pain = 10;
@@ -34,6 +33,10 @@ public class PlayerPain : MonoBehaviour
 
     void Update()
     {
+        if (pain < 0)
+        {
+            pain = 0;
+        }
         painBar.fillAmount = (pain * 0.01f) / (maxPain * 0.01f);
 
         painText.text = pain.ToString();

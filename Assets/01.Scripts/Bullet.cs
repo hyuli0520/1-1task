@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -11,7 +12,18 @@ public class Bullet : MonoBehaviour
     {
         if(collision.gameObject.tag == "BorderBullet")
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+        }
+        else if(collision.gameObject.tag == "Player")
+        {
+            Player player = collision.gameObject.GetComponent<Player>();
+            if (player != null && !player.isUnbeatable)
+            {
+                if (gameObject.tag == "EnemyBullet")
+                {
+                    PlayerHp.health -= dmg;
+                }
+            }
         }
     }
 }

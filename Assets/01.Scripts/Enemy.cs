@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     public GameObject bulletObjA;
     public GameObject bulletObjB;
     public GameObject player;
+    public ObjectManager objectManager;
 
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigid;
@@ -25,6 +26,22 @@ public class Enemy : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
+    }
+
+    void OnEnable()
+    {
+        switch (enemyName)
+        {
+            case "L":
+                health = 30;
+                break;
+            case "M":
+                health = 15;
+                break;
+            case "S":
+                health = 3;
+                break;
+        }
     }
 
     private void Update()
@@ -40,15 +57,20 @@ public class Enemy : MonoBehaviour
 
         if (enemyName == "S")
         {
-            GameObject bullet = Instantiate(bulletObjA, transform.position, transform.rotation);
+            GameObject bullet = objectManager.MakeObj("BulletEnemyA");
+            bullet.transform.position = transform.position;
+
             Rigidbody2D bulletrigid = bullet.GetComponent<Rigidbody2D>();
             Vector3 dirVec = player.transform.position - transform.position;
             bulletrigid.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
         }
         else if (enemyName == "L")
         {
-            GameObject bulletR = Instantiate(bulletObjB, transform.position + Vector3.right * 0.3f, transform.rotation);
-            GameObject bulletL = Instantiate(bulletObjB, transform.position + Vector3.left * 0.3f, transform.rotation);
+            GameObject bulletR = objectManager.MakeObj("BulletEnemyB");
+            bulletR.transform.position = transform.position + Vector3.right * 0.3f;
+            GameObject bulletL = objectManager.MakeObj("BulletEnemyB");
+            bulletL.transform.position = transform.position + Vector3.left * 0.3f;
+
             Rigidbody2D bulletrigidR = bulletR.GetComponent<Rigidbody2D>();
             Rigidbody2D bulletrigidL = bulletL.GetComponent<Rigidbody2D>();
             Vector3 dirVecR = player.transform.position - transform.position + Vector3.right * 0.3f;
@@ -75,8 +97,10 @@ public class Enemy : MonoBehaviour
         {
             Player playerLogic = player.GetComponent<Player>();
             playerLogic.score += enemyScore;
-            Destroy(gameObject);
         }
+
+        gameObject.SetActive(false);
+        transform.rotation = Quaternion.identity;
     }
 
     void ReturnSprite()
@@ -88,25 +112,23 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.tag == "BorderBullet")
         {
-            Destroy(gameObject);
-            PlayerPain.pain += enemyDmg / 2;
+            PlayerPain.pain += enemyDmg / 2; 
+            gameObject.SetActive(false);
+            transform.rotation = Quaternion.identity;   
         }
         else if (collision.gameObject.tag == "PlayerBullet")
         {
             Bullet bullet = collision.gameObject.GetComponent<Bullet>();
             OnHit(bullet.dmg);
 
-            Destroy(collision.gameObject);
+            gameObject.SetActive(false);
         }
-    }
 
-    public void PlayerAtc()
-    {
-        PlayerHp.health -= enemyDmg / 2;
-    }
-
-    public void PlayerBulletAtc()
-    {
-        PlayerHp.health -= enemyDmg;
+        if (collision.gameObject.tag == "Player")
+        {
+            Player playerLogic = collision.gameObject.GetComponent<Player>();
+            if (playerLogic != null && !playerLogic.isUnbeatable)
+                PlayerHp.health -= enemyDmg / 2;
+        }
     }
 }
