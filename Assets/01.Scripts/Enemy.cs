@@ -97,10 +97,9 @@ public class Enemy : MonoBehaviour
         {
             Player playerLogic = player.GetComponent<Player>();
             playerLogic.score += enemyScore;
+            gameObject.SetActive(false);
+            transform.rotation = Quaternion.identity;
         }
-
-        gameObject.SetActive(false);
-        transform.rotation = Quaternion.identity;
     }
 
     void ReturnSprite()
@@ -121,7 +120,7 @@ public class Enemy : MonoBehaviour
             Bullet bullet = collision.gameObject.GetComponent<Bullet>();
             OnHit(bullet.dmg);
 
-            gameObject.SetActive(false);
+            bullet.gameObject.SetActive(false);
         }
 
         if (collision.gameObject.tag == "Player")

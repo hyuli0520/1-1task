@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public string SceneName = "GameTitle";
+
     public string[] enemyObjs;
     public Transform[] spawnPoints;
 
@@ -129,6 +132,10 @@ public class GameManager : MonoBehaviour
         player.SetActive(false);
     }
 
+    public void GameOut()
+    {
+        SceneManager.LoadScene(SceneName);
+    }
     public void GameExit()
     {
         Application.Quit();
