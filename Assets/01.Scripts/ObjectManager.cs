@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class ObjectManager : MonoBehaviour
 {
+    public GameObject enemyBPrefab;
     public GameObject enemyLPrefab;
     public GameObject enemyMPrefab;
     public GameObject enemySPrefab;
@@ -15,8 +17,10 @@ public class ObjectManager : MonoBehaviour
     public GameObject bulletPlayerBPrefab;
     public GameObject bulletEnemyAPrefab;
     public GameObject bulletEnemyBPrefab;
-
-
+    public GameObject bulletBossAPrefab;
+    public GameObject bulletBossBPrefab;
+ 
+    GameObject[] enemyB;
     GameObject[] enemyL;
     GameObject[] enemyM;
     GameObject[] enemyS;
@@ -29,11 +33,12 @@ public class ObjectManager : MonoBehaviour
     GameObject[] bulletPlayerB;
     GameObject[] bulletEnemyA;
     GameObject[] bulletEnemyB;
+    GameObject[] bulletBossA;
+    GameObject[] bulletBossB;
 
-    GameObject[] targetPool;
-        
     void Awake()
     {
+        enemyB = new GameObject[10];
         enemyL = new GameObject[10];
         enemyM = new GameObject[10];
         enemyS = new GameObject[20];
@@ -47,12 +52,20 @@ public class ObjectManager : MonoBehaviour
         bulletEnemyA = new GameObject[100];
         bulletEnemyB = new GameObject[100];
 
+        bulletBossA = new GameObject[50];
+        bulletBossB = new GameObject[1000];
+
         Generate();
     }
 
     void Generate()
     {
         // #1. Enemy
+        for (int index = 0; index < enemyB.Length; index++)
+        {
+            enemyB[index] = Instantiate(enemyBPrefab);
+            enemyB[index].SetActive(false);
+        }
         for (int index = 0; index< enemyL.Length; index++)
         {
             enemyL[index] = Instantiate(enemyLPrefab);
@@ -107,12 +120,92 @@ public class ObjectManager : MonoBehaviour
             bulletEnemyB[index] = Instantiate(bulletEnemyBPrefab);
             bulletEnemyB[index].SetActive(false);
         }
+        for (int index = 0; index < bulletBossA.Length; index++)
+        {
+            bulletBossA[index] = Instantiate(bulletBossAPrefab);
+            bulletBossA[index].SetActive(false);
+        }
+        for (int index = 0; index < bulletBossB.Length; index++)
+        {
+            bulletBossB[index] = Instantiate(bulletBossBPrefab);
+            bulletBossB[index].SetActive(false);
+        }
     }
-    
+
+    //    public GameObject MakeObj(string type)
+    //    {
+    //        GameObject[] targetPool = null;
+
+    //        switch(type)
+    //        {
+    //            case "EnemyB":
+    //                targetPool = enemyB.ToArray();
+    //                break;
+    //            case "EnemyL":
+    //                targetPool = enemyL;
+    //                break;
+    //            case "EnemyM":
+    //                targetPool = enemyM;
+    //                break;
+    //            case "EnemyS":
+    //                targetPool = enemyS;
+    //                break;
+
+    //            case "ItemPower":
+    //                targetPool = itemPower;
+    //                break;
+    //            case "ItemUnbeatable":
+    //                targetPool = itemUnbeat;
+    //                break;
+    //            case "ItemHealing":
+    //                targetPool = itemHealing;
+    //                break;
+
+    //            case "BulletPlayerA":
+    //                targetPool = bulletPlayerA;
+    //                break;
+    //            case "BulletPlayerB":
+    //                targetPool = bulletPlayerB;
+    //                break;
+    //            case "BulletEnemyA":
+    //                targetPool = bulletEnemyA;
+    //                break;
+    //            case "BulletEnemyB":
+    //                targetPool = bulletEnemyB;
+    //                break;
+    //            case "BulletBossA":
+    //                targetPool = bulletBossA;
+    //                break;
+    //            case "BulletBossB":
+    //                targetPool = bulletBossB;
+    //                break;
+    //            default:
+    //                Debug.Log("아무 것도 없음");
+    //                break;
+    //        }
+
+    //        for (int index = 0; index<targetPool.Length; index++)
+    //        {
+    //            if (!targetPool[index].activeSelf)
+    //            {
+    //                targetPool[index].SetActive(true);
+    //                return targetPool[index];
+    //            }
+    //        }
+
+
+    //        return null;
+    //    }
+    //}
     public GameObject MakeObj(string type)
     {
-        switch(type)
+        GameObject[] targetPool = null;
+
+        switch (type)
         {
+            case "EnemyB":
+                targetPool = enemyB;
+                break;
             case "EnemyL":
                 targetPool = enemyL;
                 break;
@@ -145,9 +238,18 @@ public class ObjectManager : MonoBehaviour
             case "BulletEnemyB":
                 targetPool = bulletEnemyB;
                 break;
+            case "BulletBossA":
+                targetPool = bulletBossA;
+                break;
+            case "BulletBossB":
+                targetPool = bulletBossB;
+                break;
+            default:
+                Debug.Log("아무 것도 없음");
+                break;
         }
 
-        for (int index = 0; index<targetPool.Length; index++)
+        for (int index = 0; index < targetPool.Length; index++)
         {
             if (!targetPool[index].activeSelf)
             {
@@ -155,7 +257,6 @@ public class ObjectManager : MonoBehaviour
                 return targetPool[index];
             }
         }
-
         return null;
     }
 }

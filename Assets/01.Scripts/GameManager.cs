@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     public float maxSpawnDelay;
     public float curSpawnDelay;
     public int stage;
+    public int killEnemy;
+
+    public bool isBoss;
 
     public GameObject player;
     public SpriteRenderer playerSprite;
@@ -30,21 +33,30 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         stage = 1;
-        enemyObjs = new string[] { "EnemyS", "EnemyM", "EnemyL" };
+        enemyObjs = new string[] { "EnemyS", "EnemyM", "EnemyL", "EnemyB" };
     }
 
     void Update()
     {
+        Player playerLogic = player.GetComponent<Player>();
         curSpawnDelay += Time.deltaTime;
 
         if (curSpawnDelay > maxSpawnDelay)
         {
-            SpawnEnemy();
-            maxSpawnDelay = Random.Range(1.5f, 3f);
-            curSpawnDelay = 0;
+            if (killEnemy == 100 && !isBoss)
+            {
+                SpawnBoss();
+                isBoss = true;
+                killEnemy = 0;
+            }
+            if(!isBoss)
+            {
+                SpawnEnemy();
+                maxSpawnDelay = Random.Range(1.5f, 3f);
+                curSpawnDelay = 0;
+            }
         }
 
-        Player playerLogic = player.GetComponent<Player>();
         scoreText.text = string.Format("{0:n0}", playerLogic.score);
 
         if (Input.GetButtonDown("Cancel"))
@@ -65,10 +77,25 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
+
+    }
+    void SpawnBoss()
+    {
+        int bossPoint = 4;
+        GameObject boss = objectManager.MakeObj(enemyObjs[3]);
+        Debug.Log(boss);
+        boss.transform.position = spawnPoints[bossPoint].position;
+
+        Rigidbody2D rd = boss.GetComponent<Rigidbody2D>();
+        Enemy bossLogic = boss.GetComponent<Enemy>();
+        bossLogic.player = player;
+        bossLogic.objectManager = objectManager;
+        rd.velocity = new Vector2(0, bossLogic.enemySpeed * (-1));
     }
 
     void SpawnEnemy()
     {
+        killEnemy++;
         int ranEnemy = Random.Range(0, 3);
         int ranPoint = Random.Range(0, 9);
         GameObject enemy = objectManager.MakeObj(enemyObjs[ranEnemy]);
@@ -93,6 +120,7 @@ public class GameManager : MonoBehaviour
         {
             rigid.velocity = new Vector2(0, enemyLogic.enemySpeed * (-1));
         }
+
     }
 
     // 1.5ÃÊ ¹«Àû
@@ -140,4 +168,5 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
 }

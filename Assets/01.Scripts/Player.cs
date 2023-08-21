@@ -150,7 +150,8 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "EnemyBullet" || collision.gameObject.tag == "Enemy")
+        Enemy enemy = GetComponent<Enemy>();
+        if ((collision.gameObject.tag == "EnemyBullet" || collision.gameObject.tag == "Enemy"))
         {
             if (isUnbeatable)
                 return;
@@ -165,7 +166,10 @@ public class Player : MonoBehaviour
                 gameManager.RespawnPlayer();
             }
 
-            collision.gameObject.SetActive(false);
+            if (enemy.enemyName == "B")
+                return;
+            else
+                collision.gameObject.SetActive(false);
         }
         if (collision.gameObject.tag == "Item")
         {

@@ -686,6 +686,7 @@ MonoBehaviour:
   - 
   - 
   - 
+  - 
   spawnPoints:
   - {fileID: 1543086161}
   - {fileID: 1017763111}
@@ -2388,6 +2389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ba499387d4cbf4a9713b5538609a9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyBPrefab: {fileID: 7697630174386384520, guid: 5afb2b7e3c2ca124198e72360ff759e2, type: 3}
   enemyLPrefab: {fileID: 1954616217627476503, guid: 294141eb86f58bf41852398cb671dd7c, type: 3}
   enemyMPrefab: {fileID: 532337956730157966, guid: 532c2c1d35988b84b8200c2ae2b55c54, type: 3}
   enemySPrefab: {fileID: 1082907152861267265, guid: cc04230d3b9c5f143803114a4e728f4a, type: 3}
@@ -2398,6 +2400,8 @@ MonoBehaviour:
   bulletPlayerBPrefab: {fileID: 430424946019034818, guid: aafe7f5518ead124db935b657dee9632, type: 3}
   bulletEnemyAPrefab: {fileID: 430424946019034818, guid: a9373d1ac209efd4395a077423ff9a23, type: 3}
   bulletEnemyBPrefab: {fileID: 430424946019034818, guid: 477c484d3118e40468d77afef4df950c, type: 3}
+  bulletBossAPrefab: {fileID: 430424946019034818, guid: 551283a76984d6e4e9f74ade9e304a25, type: 3}
+  bulletBossBPrefab: {fileID: 430424946019034818, guid: a1e2a955adfeecf47a58ec2870734d49, type: 3}
 --- !u!4 &906321209
 Transform:
   m_ObjectHideFlags: 0

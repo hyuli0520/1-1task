@@ -2,12 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : Singleton<SoundManager>
 {
-    public AudioSource musicSource;
 
-    public void SetMusicVolume(float volume)
-    {
-        musicSource.volume = volume;
-    }
 }
