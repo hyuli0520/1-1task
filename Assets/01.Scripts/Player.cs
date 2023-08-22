@@ -20,8 +20,6 @@ public class Player : MonoBehaviour
 
     public GameManager gameManager;
     public ObjectManager objectManager;
-    public PlayerHp playerHp;
-    public PlayerPain playerPain;
     public bool isUnbeatable;
 
     Rigidbody2D rigid;
@@ -31,19 +29,18 @@ public class Player : MonoBehaviour
     private void Start()
     {
         speed = 250f;
-        maxShotDelay = 0.2f;
+        maxShotDelay = 0.7f;
         maxPower = 5;
         power = 1;
     }
 
-    
+
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
-        playerHp = GetComponent<PlayerHp>();
     }
 
     private void Update()
@@ -165,20 +162,16 @@ public class Player : MonoBehaviour
             {
                 gameManager.RespawnPlayer();
             }
-
-            if (enemy.enemyName == "B")
-                return;
-            else
-                collision.gameObject.SetActive(false);
+            collision.gameObject.SetActive(false);
         }
-        if (collision.gameObject.tag == "Item")
+        if (collision.gameObject.tag == "Item" || collision.gameObject.tag == "BloodItem")
         {
             Item item = collision.gameObject.GetComponent<Item>();
             switch (item.type)
             {
                 case "Power":
                     if (power == maxPower)
-                        score += 500;
+                        score += 300;
                     else
                         power++;
                     break;
@@ -188,6 +181,18 @@ public class Player : MonoBehaviour
                     break;
                 case "Healing":
                     PlayerHp.health += 10;
+                    break;
+                case "Coin":
+                    score += 1000;
+                    break;
+                case "PainLess":
+                    PlayerPain.pain -= 15;
+                    break;
+                case "ShootSpeed":
+                    if (maxShotDelay <= 0.2f)
+                        score += 300;
+                    else
+                        maxShotDelay -= 0.1f;
                     break;
             }
             collision.gameObject.SetActive(false);

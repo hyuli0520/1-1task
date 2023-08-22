@@ -12,7 +12,12 @@ public class ObjectManager : MonoBehaviour
     public GameObject enemySPrefab;
     public GameObject itemPowerPrefab;
     public GameObject itemUnbeatPrefab;
-    public GameObject itemHealingPrefab;    
+    public GameObject itemHealingPrefab;
+    public GameObject itemCoinPrefab;
+    public GameObject itemPainLessPrefab;
+    public GameObject itemShootSpeedPrefab;
+    public GameObject itemRedCellPrefab;
+    public GameObject itemWhiteCellPrefab;
     public GameObject bulletPlayerAPrefab;
     public GameObject bulletPlayerBPrefab;
     public GameObject bulletEnemyAPrefab;
@@ -28,6 +33,12 @@ public class ObjectManager : MonoBehaviour
     GameObject[] itemPower;
     GameObject[] itemUnbeat;
     GameObject[] itemHealing;
+    GameObject[] itemCoin;
+    GameObject[] itemPainLess;
+    GameObject[] itemShootSpeed;
+
+    GameObject[] itemRedCell;
+    GameObject[] itemWhiteCell;
 
     GameObject[] bulletPlayerA;
     GameObject[] bulletPlayerB;
@@ -46,6 +57,12 @@ public class ObjectManager : MonoBehaviour
         itemPower = new GameObject[20];
         itemUnbeat = new GameObject[20];
         itemHealing = new GameObject[20];
+        itemCoin = new GameObject[20];
+        itemPainLess = new GameObject[20];
+        itemShootSpeed = new GameObject[20];
+
+        itemRedCell = new GameObject[20];
+        itemWhiteCell = new GameObject[20];
 
         bulletPlayerA = new GameObject[100];
         bulletPlayerB = new GameObject[100];
@@ -98,8 +115,35 @@ public class ObjectManager : MonoBehaviour
             itemHealing[index] = Instantiate(itemHealingPrefab);
             itemHealing[index].SetActive(false);
         }
+        for (int index = 0; index < itemCoin.Length; index++)
+        {
+            itemCoin[index] = Instantiate(itemCoinPrefab);
+            itemCoin[index].SetActive(false);
+        }
+        for (int index = 0; index < itemPainLess.Length; index++)
+        {
+            itemPainLess[index] = Instantiate(itemPainLessPrefab);
+            itemPainLess[index].SetActive(false);
+        }
+        for (int index = 0; index < itemShootSpeed.Length; index++)
+        {
+            itemShootSpeed[index] = Instantiate(itemShootSpeedPrefab);
+            itemShootSpeed[index].SetActive(false);
+        }
 
-        // #3. Bullet
+        // #3. Blood Cell
+        for (int index = 0; index < itemRedCell.Length; index++)
+        {
+            itemRedCell[index] = Instantiate(itemRedCellPrefab);
+            itemRedCell[index].SetActive(false);
+        }
+        for (int index = 0; index < itemWhiteCell.Length; index++)
+        {
+            itemWhiteCell[index] = Instantiate(itemWhiteCellPrefab);
+            itemWhiteCell[index].SetActive(false);
+        }
+
+        // #4. Bullet
         for (int index = 0; index < bulletPlayerA.Length; index++)
         {
             bulletPlayerA[index] = Instantiate(bulletPlayerAPrefab);
@@ -132,71 +176,6 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    //    public GameObject MakeObj(string type)
-    //    {
-    //        GameObject[] targetPool = null;
-
-    //        switch(type)
-    //        {
-    //            case "EnemyB":
-    //                targetPool = enemyB.ToArray();
-    //                break;
-    //            case "EnemyL":
-    //                targetPool = enemyL;
-    //                break;
-    //            case "EnemyM":
-    //                targetPool = enemyM;
-    //                break;
-    //            case "EnemyS":
-    //                targetPool = enemyS;
-    //                break;
-
-    //            case "ItemPower":
-    //                targetPool = itemPower;
-    //                break;
-    //            case "ItemUnbeatable":
-    //                targetPool = itemUnbeat;
-    //                break;
-    //            case "ItemHealing":
-    //                targetPool = itemHealing;
-    //                break;
-
-    //            case "BulletPlayerA":
-    //                targetPool = bulletPlayerA;
-    //                break;
-    //            case "BulletPlayerB":
-    //                targetPool = bulletPlayerB;
-    //                break;
-    //            case "BulletEnemyA":
-    //                targetPool = bulletEnemyA;
-    //                break;
-    //            case "BulletEnemyB":
-    //                targetPool = bulletEnemyB;
-    //                break;
-    //            case "BulletBossA":
-    //                targetPool = bulletBossA;
-    //                break;
-    //            case "BulletBossB":
-    //                targetPool = bulletBossB;
-    //                break;
-    //            default:
-    //                Debug.Log("아무 것도 없음");
-    //                break;
-    //        }
-
-    //        for (int index = 0; index<targetPool.Length; index++)
-    //        {
-    //            if (!targetPool[index].activeSelf)
-    //            {
-    //                targetPool[index].SetActive(true);
-    //                return targetPool[index];
-    //            }
-    //        }
-
-
-    //        return null;
-    //    }
-    //}
     public GameObject MakeObj(string type)
     {
         GameObject[] targetPool = null;
@@ -224,6 +203,22 @@ public class ObjectManager : MonoBehaviour
                 break;
             case "ItemHealing":
                 targetPool = itemHealing;
+                break;
+            case "ItemCoin":
+                targetPool = itemCoin;
+                break;
+            case "ItemPainLess":
+                targetPool = itemPainLess;
+                break;
+            case "ItemShootSpeed":
+                targetPool = itemShootSpeed;
+                break;
+
+            case "ItemRedCell":
+                targetPool = itemRedCell;
+                break;
+            case "ItemWhiteCell":
+                targetPool = itemWhiteCell;
                 break;
 
             case "BulletPlayerA":
