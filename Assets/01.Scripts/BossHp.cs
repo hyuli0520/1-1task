@@ -26,9 +26,12 @@ public class BossHp : MonoBehaviour
     void Update()
     {
         curBossHealth = enemy.health;
+        if (curBossHealth < 0)
+            curBossHealth = 0;
 
         BosshealthBar.fillAmount = (curBossHealth * 0.01f) / (maxBossHealth * 0.01f);
 
+        BosshealthTxt.text = string.Format("{0:n0}", curBossHealth);
         BosshealthTxt.text = curBossHealth.ToString();
     }
 }

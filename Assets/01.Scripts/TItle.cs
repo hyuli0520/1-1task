@@ -10,11 +10,13 @@ public class TItle : MonoBehaviour
     public string sceneName = "GameStage";
 
     public GameObject optionPanel;
-    public GameObject helpPanel;
+    public GameObject helpPanel1;
+    public GameObject helpPanel2;
 
     public void ClickStart()
     {
         SceneManager.LoadScene(sceneName);
+        Time.timeScale = 1;
     }
 
     public void ClickOption()
@@ -30,7 +32,7 @@ public class TItle : MonoBehaviour
     public void ClickHelp()
     {
         optionPanel.SetActive(false);
-        helpPanel.SetActive(true);
+        helpPanel1.SetActive(true);
     }
 
     public void ClickBack()
@@ -39,7 +41,14 @@ public class TItle : MonoBehaviour
     }
     public void ClickOptionBack()
     {
-        helpPanel.SetActive(!helpPanel.activeSelf);
+        helpPanel1.SetActive(false);
+        helpPanel2.SetActive(false);
         optionPanel.SetActive(!optionPanel.activeSelf);
+    }
+    
+    public void ClickPage()
+    {
+        helpPanel1.SetActive(!helpPanel1.activeSelf);
+        helpPanel2.SetActive(!helpPanel2.activeSelf);
     }
 }

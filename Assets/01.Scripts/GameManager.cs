@@ -1,12 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
     public string SceneName = "GameTitle";
+    public string GameSceneName = "GameStage";
 
     public string[] itemObjs;
     public string[] enemyObjs;
@@ -18,6 +19,7 @@ public class GameManager : Singleton<GameManager>
     public float curItemDelay;
     public int stage;
     public int killEnemy;
+    public int itemGet;
 
     public bool isBoss;
 
@@ -27,9 +29,12 @@ public class GameManager : Singleton<GameManager>
     public GameObject stage1Text;
     public GameObject stage2Text;
     public GameObject gameOverSet;
+    public GameObject gameComplete;
     public GameObject menuSet;
     public ObjectManager objectManager;
     public BossHp bossHpBar;
+    public GameObject GameRank;
+    public Item item;
 
     public Animator Stage1Anim;
     public Animator Stage2Anim;
@@ -38,6 +43,7 @@ public class GameManager : Singleton<GameManager>
     {
         maxSpawnDelay = 5;
         maxItemDelay = 5;
+        GameClear();
         StartCoroutine(Stage1Start());
     }
 
@@ -69,10 +75,10 @@ public class GameManager : Singleton<GameManager>
                 curSpawnDelay = 0;
             }
         }
-        if(curItemDelay > maxItemDelay)
+        if (curItemDelay > maxItemDelay)
         {
             SpawnItem();
-            maxItemDelay = Random.Range(5f, 10f);
+            maxItemDelay = Random.Range(3f, 6f);
             curItemDelay = 0;
         }
 
@@ -96,24 +102,42 @@ public class GameManager : Singleton<GameManager>
         {
             GameOver();
         }
+
+        if (GameRank.activeSelf == true)
+        {
+            Time.timeScale = 0f;
+        }
+    }
+
+    public void StageStart1()
+    {
+        StartCoroutine(Stage1Start());
+        GameClear();
+    }
+    public void StageStart2()
+    {
+        StartCoroutine(Stage2Start());
+        GameClear();
     }
 
     IEnumerator Stage1Start()
     {
-        isBoss = false;
         yield return new WaitForSeconds(2f);
         stage1Text.SetActive(true);
         Stage1Anim.SetTrigger("On");
+        isBoss = false;
+        killEnemy = 0;
         yield return new WaitForSeconds(1f);
         stage1Text.SetActive(false);
     }
 
     IEnumerator Stage2Start()
     {
-        isBoss = false;
         yield return new WaitForSeconds(2f);
         stage2Text.SetActive(true);
         Stage2Anim.SetTrigger("On");
+        isBoss = false;
+        killEnemy = 0;
         yield return new WaitForSeconds(1f);
         stage2Text.SetActive(false);
     }
@@ -135,15 +159,63 @@ public class GameManager : Singleton<GameManager>
 
     public void DieBoss()
     {
-        if (stage > 2)
-            return;
+        if (stage == 2)
+        {
+            Time.timeScale = 0;
+            gameComplete.SetActive(true);
+        }
         else
         {
             stage++;
-            killEnemy = 0;
             bossHpBar.gameObject.SetActive(false);
+            Invoke("GameClear", 2f);
             StartCoroutine(Stage2Start());
         }
+    }
+
+    void GameClear()
+    {
+        if (stage == 1)
+        {
+            PlayerHp.health = 100;
+            PlayerPain.pain = 10;
+        }
+        else if (stage == 2)
+        {
+            PlayerHp.health = 100;
+            PlayerPain.pain = 30;
+        }
+    }
+
+    void GameCompleteSet()
+    {
+        gameComplete.SetActive(false);
+        GameRank.SetActive(true);
+    }
+
+    void StageClear()
+    {
+        Player playerLogic = player.GetComponent<Player>();
+
+        // Ã¼·Â °ÔÀÌÁö Ãß°¡ Á¡¼ö È¹µæ
+        if (PlayerHp.health > 80)
+            playerLogic.score += 2000;
+        else
+            playerLogic.score += 1000;
+
+        // °íÅë °ÔÀÌÁö Ãß°¡ Á¡¼ö È¹µæ
+        if (PlayerPain.pain > 80)
+            playerLogic.score += 2000;
+        else
+            playerLogic.score += 1000;
+
+        // ¾ÆÀÌÅÛ Ãß°¡ Á¡¼ö È¹µæ
+        if (itemGet > 5 && itemGet <= 15)
+            playerLogic.score += 500;
+        else if (itemGet > 15)
+            playerLogic.score += 1500;
+        else
+            playerLogic.score += 100;
     }
 
     void SpawnEnemy()
@@ -180,11 +252,12 @@ public class GameManager : Singleton<GameManager>
     {
         int ItemNum = Random.Range(0, 2);
         int ranPoint = Random.Range(0, 9);
-        GameObject item = objectManager.MakeObj(itemObjs[ItemNum]);
-        item.transform.position = spawnPoints[ranPoint].position;
+        GameObject _item = objectManager.MakeObj(itemObjs[ItemNum]);
+        _item.transform.position = spawnPoints[ranPoint].position;
+        
 
-        Rigidbody2D rigid = item.GetComponent<Rigidbody2D>();
-        Item itemLogic = item.GetComponent<Item>();
+        Rigidbody2D rigid = _item.GetComponent<Rigidbody2D>();
+        Item itemLogic = _item.GetComponent<Item>();
         itemLogic.objectManager = objectManager;
 
         if (ranPoint == 5 || ranPoint == 6)
@@ -236,6 +309,18 @@ public class GameManager : Singleton<GameManager>
     {
         gameOverSet.SetActive(true);
         player.SetActive(false);
+    }
+
+    public void GoRanking()
+    {
+        GameRank.SetActive(true);
+    }
+
+    public void ReStart()
+    {
+        SceneManager.LoadScene(GameSceneName);
+        GameRank.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void GameOut()

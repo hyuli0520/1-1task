@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     float h, v;
-    public int score;
+    public int score = 0;
     public float speed;
     public int maxPower;
     public int power;
@@ -29,12 +29,10 @@ public class Player : MonoBehaviour
     private void Start()
     {
         speed = 250f;
-        maxShotDelay = 0.7f;
+        maxShotDelay = 0.4f;
         maxPower = 5;
         power = 1;
     }
-
-
 
     private void Awake()
     {
@@ -85,6 +83,7 @@ public class Player : MonoBehaviour
         switch (power)
         {
             case 1:
+                SoundManager.Instance.OnSfx();
                 GameObject bullet = objectManager.MakeObj("BulletPlayerA");
                 bullet.transform.position = transform.position;
 
@@ -92,6 +91,7 @@ public class Player : MonoBehaviour
                 bulletrigid.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 2:
+                SoundManager.Instance.OnSfx();
                 GameObject bulletR = objectManager.MakeObj("BulletPlayerA");
                 bulletR.transform.position = transform.position + Vector3.right * 0.1f;
                 GameObject bulletL = objectManager.MakeObj("BulletPlayerA");
@@ -104,6 +104,7 @@ public class Player : MonoBehaviour
                 bulletrigidL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 3:
+                SoundManager.Instance.OnSfx();
                 GameObject bulletC = objectManager.MakeObj("BulletPlayerB");
                 bulletC.transform.position = transform.position;
 
@@ -111,6 +112,7 @@ public class Player : MonoBehaviour
                 bulletrigidC.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 4:
+                SoundManager.Instance.OnSfx();
                 GameObject bulletRR = objectManager.MakeObj("BulletPlayerA");
                 bulletRR.transform.position = transform.position + Vector3.right * 0.35f;
                 GameObject bulletCC = objectManager.MakeObj("BulletPlayerB");
@@ -126,6 +128,7 @@ public class Player : MonoBehaviour
                 bulletrigidLL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 break;
             case 5:
+                SoundManager.Instance.OnSfx();
                 GameObject bulletCR = objectManager.MakeObj("BulletPlayerB");
                 bulletCR.transform.position = transform.position + Vector3.right * 0.25f;
                 GameObject bulletCL = objectManager.MakeObj("BulletPlayerB");
@@ -180,7 +183,7 @@ public class Player : MonoBehaviour
                     gameManager.Unbeatable();
                     break;
                 case "Healing":
-                    PlayerHp.health += 10;
+                    PlayerHp.health += 20;
                     break;
                 case "Coin":
                     score += 1000;
@@ -189,12 +192,13 @@ public class Player : MonoBehaviour
                     PlayerPain.pain -= 15;
                     break;
                 case "ShootSpeed":
-                    if (maxShotDelay <= 0.2f)
+                    if (maxShotDelay <= 0.15f)
                         score += 300;
                     else
                         maxShotDelay -= 0.1f;
                     break;
             }
+            GameManager.Instance.itemGet++;
             collision.gameObject.SetActive(false);
         }
     }

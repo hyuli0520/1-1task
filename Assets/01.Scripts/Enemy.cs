@@ -40,21 +40,43 @@ public class Enemy : MonoBehaviour
 
     void OnEnable()
     {
-        switch (enemyName)
+        if (GameManager.Instance.stage == 1)
         {
-            case "B":
-                health = 1200;
-                Stop();
-                break;
-            case "L":
-                health = 30;
-                break;
-            case "M":
-                health = 15;
-                break;
-            case "S":
-                health = 3;
-                break;
+            switch (enemyName)
+            {
+                case "B":
+                    health = 1000;
+                    Stop();
+                    break;
+                case "L":
+                    health = 10;
+                    break;
+                case "M":
+                    health = 5;
+                    break;
+                case "S":
+                    health = 2;
+                    break;
+            }
+        }
+        else if (GameManager.Instance.stage == 2)
+        {
+            switch (enemyName)
+            {
+                case "B":
+                    health = 1500;
+                    Stop();
+                    break;
+                case "L":
+                    health = 40;
+                    break;
+                case "M":
+                    health = 20;
+                    break;
+                case "S":
+                    health = 8;
+                    break;
+            }
         }
     }
 
@@ -119,12 +141,20 @@ public class Enemy : MonoBehaviour
 
         curPatternCount++;
 
-        if (curPatternCount < maxPatternCount[patternIndex])
+        if (GameManager.Instance.stage == 1)
         {
-            Invoke("FireForward", 2);
+            if (curPatternCount < maxPatternCount[patternIndex])
+                Invoke("FireForward", 2);
+            else
+                StartCoroutine(Think(3f));
         }
         else
-            StartCoroutine(Think(3f));
+        {
+            if (curPatternCount < maxPatternCount[patternIndex])
+                Invoke("FireForward", 1);
+            else
+                StartCoroutine(Think(2f));
+        }
     }
     void FireShot()
     {
@@ -141,12 +171,20 @@ public class Enemy : MonoBehaviour
         }
         curPatternCount++;
 
-        if (curPatternCount < maxPatternCount[patternIndex])
+        if (GameManager.Instance.stage == 1)
         {
-            Invoke("FireShot", 3.5f);
+            if (curPatternCount < maxPatternCount[patternIndex])
+                Invoke("FireShot", 3f);
+            else
+                StartCoroutine(Think(3f));
         }
         else
-            StartCoroutine(Think(3f));
+        {
+            if (curPatternCount < maxPatternCount[patternIndex])
+                Invoke("FireShot", 2f);
+            else
+                StartCoroutine(Think(3f));
+        }
     }
     void FireArc()
     {
@@ -169,31 +207,53 @@ public class Enemy : MonoBehaviour
     }
     void FireAround()
     {
-        int roundNumA = 30;
-        int roundNumB = 20;
-        int roundNum = curPatternCount % 2 == 0 ? roundNumA : roundNumB;
-
-        for (int index = 0; index < roundNum; index++)
+        if (GameManager.Instance.stage == 1)
         {
-            GameObject bullet = objectManager.MakeObj("BulletBossB");
-            bullet.transform.position = transform.position;
-            bullet.transform.rotation = Quaternion.identity;
+            int roundNumA = 30;
+            int roundNumB = 20;
+            int roundNum = curPatternCount % 2 == 0 ? roundNumA : roundNumB;
 
-            Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
-            Vector2 dirVec = new Vector2(Mathf.Cos(Mathf.PI * 2 * index / roundNum),
-                                         Mathf.Sin(Mathf.PI * 2 * index / roundNum));
-            rigid.AddForce(dirVec.normalized * 2, ForceMode2D.Impulse);
+            for (int index = 0; index < roundNum; index++)
+            {
+                GameObject bullet = objectManager.MakeObj("BulletBossB");
+                bullet.transform.position = transform.position;
+                bullet.transform.rotation = Quaternion.identity;
 
-            Vector3 rotVec = Vector3.forward * 360 * index / roundNum + Vector3.forward * 90;
-            bullet.transform.Rotate(rotVec);
+                Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
+                Vector2 dirVec = new Vector2(Mathf.Cos(Mathf.PI * 2 * index / roundNum),
+                                             Mathf.Sin(Mathf.PI * 2 * index / roundNum));
+                rigid.AddForce(dirVec.normalized * 2, ForceMode2D.Impulse);
+
+                Vector3 rotVec = Vector3.forward * 360 * index / roundNum + Vector3.forward * 90;
+                bullet.transform.Rotate(rotVec);
+            }
+        }
+        else if (GameManager.Instance.stage == 2)
+        {
+            int roundNumA = 35;
+            int roundNumB = 30;
+            int roundNum = curPatternCount % 2 == 0 ? roundNumA : roundNumB;
+
+            for (int index = 0; index < roundNum; index++)
+            {
+                GameObject bullet = objectManager.MakeObj("BulletBossB");
+                bullet.transform.position = transform.position;
+                bullet.transform.rotation = Quaternion.identity;
+
+                Rigidbody2D rigid = bullet.GetComponent<Rigidbody2D>();
+                Vector2 dirVec = new Vector2(Mathf.Cos(Mathf.PI * 2 * index / roundNum),
+                                             Mathf.Sin(Mathf.PI * 2 * index / roundNum));
+                rigid.AddForce(dirVec.normalized * 2, ForceMode2D.Impulse);
+
+                Vector3 rotVec = Vector3.forward * 360 * index / roundNum + Vector3.forward * 90;
+                bullet.transform.Rotate(rotVec);
+            }
         }
 
         curPatternCount++;
 
         if (curPatternCount < maxPatternCount[patternIndex])
-        {
             Invoke("FireAround", 0.7f);
-        }
         else
             StartCoroutine(Think(3f));
     }
@@ -258,7 +318,7 @@ public class Enemy : MonoBehaviour
             playerLogic.score += enemyScore;
             gameObject.SetActive(false);
             transform.rotation = Quaternion.identity;
-            if(enemyName == "B")
+            if (enemyName == "B")
             {
                 GameManager.Instance.DieBoss();
             }

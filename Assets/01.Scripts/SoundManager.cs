@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class SoundManager : Singleton<SoundManager>
 {
-    private float volume = 1;
+    private float volume = 0.5f;
     public AudioSource audioSource;
+    public AudioSource SfxSource;
 
     public override void Awake()
     {
@@ -30,5 +31,21 @@ public class SoundManager : Singleton<SoundManager>
             volume = value;
             audioSource.volume = value;
         }
+    }
+    public float SfxVolume
+    {
+        get
+        {
+            return volume;
+        }
+        set
+        {
+            volume = value;
+            SfxSource.volume = value;
+        }
+    }
+    public void OnSfx()
+    {
+        SfxSource.Play();
     }
 }

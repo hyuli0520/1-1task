@@ -42,7 +42,6 @@ public class Cheat : MonoBehaviour
             OnChangeHp();
         if (Input.GetKeyDown(KeyCode.Keypad7))
             OnChangePain();
-
         if (Input.GetKeyDown(KeyCode.Keypad8))
             SpawnBloodWhite();
         if (Input.GetKeyDown(KeyCode.Keypad9))
