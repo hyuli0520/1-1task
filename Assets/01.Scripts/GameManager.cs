@@ -116,7 +116,6 @@ public class GameManager : Singleton<GameManager>
     }
     public void StageStart2()
     {
-        StartCoroutine(Stage2Start());
         GameClear();
     }
 

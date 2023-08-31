@@ -6429,7 +6429,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Game Over
+  m_Text: Game Clear
 --- !u!222 &1457438141
 CanvasRenderer:
   m_ObjectHideFlags: 0

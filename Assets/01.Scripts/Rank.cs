@@ -71,6 +71,7 @@ public class Rank : MonoBehaviour
         Bestplayer.bestScore = playerScore;
         ranks.Add(Bestplayer);
 
+        // 람다식 정렬
         ranks.Sort((a, b) => { return b.bestScore - a.bestScore; });
 
         for (int i = 0; i < 5; i++)
