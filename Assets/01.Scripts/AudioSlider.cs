@@ -8,6 +8,7 @@ public class AudioSlider : MonoBehaviour
     public Slider musicSlider;
     public Slider sfxSlider;
 
+    // 테스트용
     public void Start()
     {
         musicSlider.value = SoundManager.Instance.Volume;
